@@ -83,28 +83,7 @@ status() {
 
   # RUNNING
   if [[ $pid && -d "/proc/$pid" ]]; then
-    version=$(curl -s 'http://localhost:9200' | ruby -rubygems -e 'require "json"; print JSON.parse(STDIN.read)["version"]["number"]')
-    echo -e "\033[1;37;46melasticsearch $version running with PID $pid\033[0m"
-    # VERBOSE
-    if [[ $pid && $1 == '-v' || $1 == '--verbose' ]]; then
-      curl -s 'http://localhost:9200/_cluster/nodes/<%= node.elasticsearch[:node_name] %>?os&process&jvm&network&transport&settings&pretty' | \
-      ruby -rubygems -e '
-        begin
-          require "json"; h = JSON.parse(STDIN.read); id, node = h["nodes"].first;
-          def e(name, value); puts %Q|\e[1;36m#{(name.to_s+":").ljust(20)}\e[0m #{value || "N/A" rescue "N/A"}|; end
-          e "HTTP Address",  node["http_address"]
-          e "Node Name",     node["name"]
-          e "Cluster Name",  h["cluster_name"]
-          e "Started",       Time.at(node["jvm"]["start_time"].to_i/1000)
-          e "JVM",           "#{node["jvm"]["vm_name"]} (#{node["jvm"]["version"]})"
-          e "Memory Total",  node["os"]["mem"]["total"]
-          e "Open Files",    node["process"]["max_file_descriptors"]
-          e "Configuration", node["settings"]["config"]
-        rescue
-          puts "Metadata cannot be retrieved."
-        end
-      '
-    fi
+    echo -e "\033[1;37;46melasticsearch running with PID $pid\033[0m"
     # INCORRECT PID?
     if [ $pid != $CHECK_PID_RUNNING ]; then
       echo -e "\033[1;31;40m[!] Incorrect PID found in $PIDFILE: $pid\033[0m"
