@@ -22,4 +22,4 @@ default.elasticsearch[:nginx][:passwords_file] = "#{node.elasticsearch[:conf_pat
 #
 # Set this to `true` if you want to use a tool like BigDesk
 #
-default.elasticsearch[:nginx][:allow_cluster_api] = false
+default.elasticsearch[:nginx][:allow_cluster_api] = true
